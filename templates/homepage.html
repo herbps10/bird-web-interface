@@ -1,0 +1,103 @@
+<html>
+    <head>
+        <title>Sound Recorder</title>
+
+        <link rel='stylesheet' href='static/assets/css/bootstrap.css' />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    </head>
+    <body>
+    
+
+    <div class='container-fluid'>
+        <h1>Sound Recorder</h1>
+        
+        <hr />
+
+        <h3>Status</h3>
+
+        <div class='row'>
+            <div class='col-md-6'>
+                <strong>Disk usage</strong>
+                <pre>
+                    {{ df }}
+                </pre>
+
+                <strong>Internal battery voltage</strong>
+                {{ internal_battery_voltage }}v
+                <progress class='progress' value='{{ internal_battery_voltage }}' max="9.5"></progress>
+
+                <strong>External battery voltage</strong>
+                {{ external_battery_voltage }}v
+                <progress class='progress' value='{{ external_battery_voltage }}' max="16"></progress>
+
+                <strong>Uptime</strong>
+                <div>{{ uptime }}</div>
+            </div>
+        </div>
+
+        <hr />
+
+        <h3>Settings</h3>
+        <div class='row'>
+            <div class='col-md-3'>
+                <form action='/save/location' method='post'>
+                    <div class='form-group'>
+                        <label for='latitude'>Latitude:</label>
+                        <input type='text' name='latitude' placeholder='Latitude...' value='{{ location[0] }}' class='form-control'>
+                    </div>
+
+                    <div class='form-group'>
+                        <label for='longitude'>Longitude:</label>
+                        <input type='text' name='longitude' placeholder='Longitude...' value='{{ location[1] }}' class='form-control'>
+                    </div>
+
+                    <input type='submit' value='Save Location' class='btn btn-primary' />
+                </form>
+            </div>
+
+            <div class='col-md-3'>
+                <form action='/save/date' method='post'>
+                    <div class='form-group'>
+                        <label for='month'>Month:</label>
+                        <select name='month' class='form-control'>
+                            {% for month in range(1, 13) %}
+                                <option value='{{ '0' if month < 10 }}{{ month }}' {{ "selected='selected'" if month == now.month }} >{{ months[month] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class='form-group'>
+                        <label for='day'>Day:</label>
+                        <select name='day' class='form-control'>
+                            {% for day in range(1, 32) %}
+                                <option value='{{ day }}' {{ "selected = 'selected'" if day == now.day }}>{{ day }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class='form-group'>
+                        <label for='year'>Year:</label>
+                        <select name='year' class='form-control'>
+                            {% for year in range(2016, 2030) %}
+                                <option value='{{ year }}' {{ "selected='selected'" if year == now.year }}>{{ year }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class='form-group'>
+                        <label for='time'>Time:</label>
+                        <input type='text' name='time' placeholder='HH:MM:SS (24 hour)' value="{{ (now.hour|string) + ":" + (now.minute|string) + ":" + (now.second|string) }}" class='form-control'>
+                    </div>
+
+                    <div class='form-group'>
+                        <input type='submit' value='Set Date and Time' class='btn btn-primary' />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    </body>
+</html>
+
